@@ -18,7 +18,7 @@ The skills preserve a small handoff protocol. The backlog and repository are the
 | [`delivery-discover`](skills/delivery-discover/SKILL.md) | Propose relevant, evidence-backed tasks for the user's selection without changing the backlog. |
 | [`delivery-backlog`](skills/delivery-backlog/SKILL.md) | Read the live backlog, add or update a task when requested, and prepare a scoped dispatch. |
 | [`delivery-implement`](skills/delivery-implement/SKILL.md) | Implement a dispatch, run the relevant checks, and write an evidence-based handoff. |
-| [`delivery-audit`](skills/delivery-audit/SKILL.md) | Inspect product behavior, correctness, efficiency, reuse, and checks; commit accepted work locally by default or write a precise remediation round. |
+| [`delivery-audit`](skills/delivery-audit/SKILL.md) | Review the work as a senior maintainer would: question the dispatch against the project's rules, weigh which deeper reviews the change warrants (product logic; architecture, reuse and efficiency; security; contract drift), prove the tests would catch a regression, then commit accepted work locally by default or write a precise remediation round. |
 | [`delivery-loop`](skills/delivery-loop/SKILL.md) | Coordinate separate implementation and audit agents through bounded remediation rounds, then verify accepted-task closure. |
 
 These are instruction-based skills: they use the agent's existing repository and shell tools. They do not require a particular model, vendor, language, or issue tracker. An agent must support the Agent Skills `SKILL.md` convention to discover them automatically; otherwise, point it at the relevant file explicitly.
@@ -77,6 +77,8 @@ Run these in the **project you want to work on**, not in this skillset repositor
 | Implement the dispatch | `$delivery-implement <slug>` | `/delivery-implement <slug>` |
 | Independently verify and close accepted work | `$delivery-audit <slug>` | `/delivery-audit <slug>` |
 | Coordinate dispatch, implementation, and audit | `$delivery-loop <slug>` | `/delivery-loop <slug>` |
+
+The audit is weighed, not uniform. Every audit runs a short set of core steps. The deeper reviews live in separate files under `skills/delivery-audit/references/` and are opened only when the change calls for them, at compact or full depth: the dispatch records the expected depth, and the auditor may raise it when the diff touches more than expected. The verdict states which reviews ran and which were skipped and why.
 
 For manual handoffs, give the implementation and audit steps to separate agents or sessions. `delivery-implement` writes a summary; `delivery-audit` checks the actual work and either requests a bounded remediation round or accepts it. On acceptance, audit marks the task done and makes a detailed **local** commit on its feature branch by default. You can opt out of that commit. Merging and pushing are separate actions.
 
