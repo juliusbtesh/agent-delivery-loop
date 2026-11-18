@@ -1,0 +1,3 @@
+# Store and check out text files with LF endings on every platform.
+# A CRLF shebang breaks ./scripts/install.py on macOS and Linux.
+* text=auto eol=lf

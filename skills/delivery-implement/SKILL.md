@@ -9,7 +9,7 @@ The invocation argument is the dispatch slug. Work in the feature branch and wor
 
 ## Before editing
 
-- Read the dispatch round, outcome, scope, non-goals, and verification. Compare its `Base`, `Parent branch`, `Feature branch`, `Worktree`, and `Pre-existing changes` with the current repository state. Reconcile changes since dispatch before editing. Do not work on the integration branch or in another agent's checkout. If a task path already contained user changes, isolate the task or establish an explicit baseline; never treat the whole file diff as your work.
+- Read the dispatch round, outcome, scope, non-goals, and verification. Compare its `Base`, `Parent branch`, `Feature branch`, `Worktree`, and `Pre-existing changes` with the current repository state. Reconcile changes since dispatch before editing. Do not work on the integration branch or in another agent's checkout. If the dispatch's `Worktree` is the repository's main checkout (its `.git` is a directory, not a file pointing at a worktree), or the checkout is on the integration branch, stop and report it: the task must be re-dispatched into its own worktree. If a task path already contained user changes, isolate the task or establish an explicit baseline; never treat the whole file diff as your work.
 - Read the relevant source and tests. Recheck any prerequisite that could have changed since dispatch.
 - In a remediation round, inspect the existing work and address the named findings in place. Preserve portions the audit accepted.
 
