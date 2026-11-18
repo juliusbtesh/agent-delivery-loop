@@ -14,6 +14,7 @@ SKILLS = (
     "delivery-implement",
     "delivery-audit",
     "delivery-loop",
+    "delivery-promote",
 )
 CLAUDE_ALIASES = {
     "backlog": "delivery-backlog",
