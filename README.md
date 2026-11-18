@@ -5,9 +5,12 @@ Seven portable [Agent Skills](https://agentskills.io/specification) for setting 
 ```
 setup → discover → backlog → dispatch → implement → audit → remediation or acceptance
 
-delivery-loop coordinates dispatch → implement → audit → remediation or acceptance
+delivery-loop coordinates dispatch → implement → audit → remediation or acceptance,
+then, on your go-ahead, integrates accepted work and hands off to promotion
 
 delivery-promote moves integrated work along the branch chain (optional, per project)
+
+backlog → implement → audit → integrate → promote, with a deliberate stop between stages
 ```
 
 The skills preserve a small handoff protocol. The backlog and repository are the durable sources of truth. Dispatch and implementation summaries are temporary files in `.agent-delivery/dispatch/` so separate agent sessions can coordinate without copying a prompt through chat.
@@ -93,7 +96,7 @@ If you installed the optional Claude aliases, `/backlog`, `/implement`, and `/au
 
 ## Handoff files
 
-Every task gets its own feature branch in its own new worktree; the main checkout is never switched or used as the task tree. The integration branch is `development` unless the project's workflow names another. For a task slug `<slug>`, the backlog skill creates that branch and worktree (or reuses the task's existing ones) and writes `.agent-delivery/dispatch/<slug>.md` in the worktree. It records the integration branch, parent branch, exact base commit, feature branch, worktree path, and any pre-existing changes. Independent tasks branch from the integration branch; a task depending on unmerged accepted work branches from its prerequisite feature tip. The implementer writes `.agent-delivery/dispatch/<slug>.summary.md`. A remediation round updates the dispatch and replaces the old summary. Both files stay local and ignored in that worktree; accepted code, tests, and backlog/status updates become the durable record on the feature branch. The backlog skill also prepares the worktree so the project's checks can run there (dependencies installed, ignored local configuration copied) and records that on the dispatch. In a project that never ran setup, the handoff folder is hidden through the repository's local `.git/info/exclude`. Feature branches remain unmerged until a separate merge action is authorized; once a branch is merged, the loop removes that task's worktree and local branch.
+Every task gets its own feature branch in its own new worktree; the main checkout is never switched or used as the task tree. The integration branch is `development` unless the project's workflow names another. For a task slug `<slug>`, the backlog skill creates that branch and worktree (or reuses the task's existing ones) and writes `.agent-delivery/dispatch/<slug>.md` in the worktree. It records the integration branch, parent branch, exact base commit, feature branch, worktree path, and any pre-existing changes. Independent tasks branch from the integration branch; a task depending on unmerged accepted work branches from its prerequisite feature tip. The implementer writes `.agent-delivery/dispatch/<slug>.summary.md`. A remediation round updates the dispatch and replaces the old summary. Both files stay local and ignored in that worktree; accepted code, tests, and backlog/status updates become the durable record on the feature branch. The backlog skill also prepares the worktree so the project's checks can run there (dependencies installed, ignored local configuration copied) and records that on the dispatch. In a project that never ran setup, the handoff folder is hidden through the repository's local `.git/info/exclude`. Accepted work stays on its feature branch until you give the go-ahead to integrate. The loop then merges the accepted branches into the integration branch in dependency order by the project's method, runs the project's checks on the merged result, removes each merged task's worktree and local branch, and, where the project has a promotion chain, reports what is integrated but not yet promoted. It never promotes on its own.
 
 ## Origin
 
